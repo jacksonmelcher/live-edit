@@ -5,6 +5,7 @@ import { nanoid } from "nanoid";
 import { revalidatePath } from "next/cache";
 import { liveblocks } from "../liveblocks";
 import { parseStringify } from "../utils";
+import { title } from "process";
 
 export const createDocument = async ({
   userId,
@@ -46,11 +47,22 @@ export const getDocument = async ({
   try {
     const room = await liveblocks.getRoom(roomId);
 
-    const hasAccess = Object.keys(room.usersAccesses).includes(userId);
-    if (!hasAccess) throw new Error("You do not have access to this document");
+    // const hasAccess = Object.keys(room.usersAccesses).includes(userId);
+    // if (!hasAccess) throw new Error("You do not have access to this document");
 
     return parseStringify(room);
   } catch (error) {
     console.log(`Error getting document: ${error}`);
+  }
+};
+
+export const updateDocument = async (roomId: string, newTitle: string) => {
+  try {
+    const updateRoom = await liveblocks.updateRoom(roomId, {
+      metadata: { title: newTitle },
+    });
+    return parseStringify(updateRoom);
+  } catch (error) {
+    console.log(`Error updateing document: ${error}`);
   }
 };
