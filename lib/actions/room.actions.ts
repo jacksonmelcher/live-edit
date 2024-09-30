@@ -5,7 +5,6 @@ import { nanoid } from "nanoid";
 import { revalidatePath } from "next/cache";
 import { liveblocks } from "../liveblocks";
 import { parseStringify } from "../utils";
-import { title } from "process";
 
 export const createDocument = async ({
   userId,
@@ -56,7 +55,13 @@ export const getDocument = async ({
   }
 };
 
-export const updateDocument = async (roomId: string, newTitle: string) => {
+export const updateDocument = async ({
+  roomId,
+  newTitle,
+}: {
+  roomId: string;
+  newTitle: string;
+}) => {
   try {
     const updateRoom = await liveblocks.updateRoom(roomId, {
       metadata: { title: newTitle },
@@ -64,5 +69,16 @@ export const updateDocument = async (roomId: string, newTitle: string) => {
     return parseStringify(updateRoom);
   } catch (error) {
     console.log(`Error updateing document: ${error}`);
+  }
+};
+
+export const getAllDocuments = async ({ email }: { email: string }) => {
+  console.log(email);
+  try {
+    const rooms = await liveblocks.getRooms({ userId: email });
+
+    return parseStringify(rooms);
+  } catch (error) {
+    console.log(`Error getting document: ${error}`);
   }
 };

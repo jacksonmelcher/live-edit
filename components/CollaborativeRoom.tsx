@@ -28,7 +28,10 @@ const CollaborativeRoom = ({
       setLoading(true);
       try {
         if (documentTitle !== roomMetadata.title) {
-          const updatedDocument = await updateDocument(roomId, documentTitle);
+          const updatedDocument = await updateDocument({
+            roomId,
+            newTitle: documentTitle,
+          });
 
           if (updatedDocument) {
             setEditing(false);
@@ -46,7 +49,7 @@ const CollaborativeRoom = ({
         !containerRef.current.contains(e.target as Node)
       ) {
         setEditing(false);
-        updateDocument(roomId, documentTitle);
+        updateDocument({ roomId, newTitle: documentTitle });
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
