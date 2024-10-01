@@ -5,7 +5,7 @@ import { parseStringify } from "../utils";
 
 export const getClerkUsers = async ({ userIds }: { userIds: string[] }) => {
   try {
-    const { data } = await clerkClient.users.getUserList({
+    const { data } = await clerkClient().users.getUserList({
       emailAddress: userIds,
     });
 
@@ -19,8 +19,6 @@ export const getClerkUsers = async ({ userIds }: { userIds: string[] }) => {
     const sortedUsers = userIds.map((email: string) =>
       users.find((user) => user.email === email),
     );
-
-    console.log(sortedUsers);
 
     return parseStringify(sortedUsers);
   } catch (error) {
